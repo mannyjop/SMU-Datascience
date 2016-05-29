@@ -1,0 +1,89 @@
+---
+title: "Week4 Homework, 2016-0509 MSDS 6306"
+author: "Christopher Farrar"
+date: "May 28, 2016"
+output: 
+   html_document:
+   keep_md: true
+   
+---
+# Week 4 Homework
+  * Write a bootstrap code to illustrate the central limit theorem in R markdown and push the results
+    to GitHub
+  * Use a normal distribution with two different sample sizes
+  * Use a exponential distribution with two different sample sizes
+  * Comment on the code and explain the results
+  * Deliverable is a link to the GitHub repo containing the code
+
+## Normal distribution with bootstrap code 
+
+```{r}
+x <- rnorm(18, 4, 2)
+y <- rnorm(9, 4, 2)
+
+normsampleA <- sample(x, size = length(x), replace = TRUE)
+
+normsampleB <- sample(y, size = length(y), replace = TRUE)
+
+Z <- 1000
+
+sampleAmedian <- numeric(Z)
+sampleBmedian <- numeric(Z)
+
+for (i in 1:Z) {
+  normsampleA <- sample(x, size = length(x), replace = TRUE)
+  normsampleB <- sample(y, size = length(y), replace = TRUE)
+  sampleAmedian[i] <- median(normsampleA, na.rm = FALSE)
+  sampleBmedian[i] <- median(normsampleB, na.rm = FALSE)
+}
+sampleAmedian
+sampleAmedian
+
+hist(sampleAmedian)
+hist(sampleBmedian)
+
+```
+
+## Exponential distribution with bootstrap code
+
+```{r}
+
+A <- c(2.1,4.3,2.8,6.4,3.6,3.3,7.2)
+B <- c(3.1,2.0,4.4,6.0,1.2)
+
+expsampleA <- sample(A, size = length(A), replace = TRUE)
+expsampleB <- sample(B, size = length(B), replace = TRUE)
+
+expA <- pexp(A, rate = 1, lower.tail = TRUE, log.p = FALSE)
+expB <- pexp(B, rate = 1, lower.tail = TRUE, log.p = FALSE)
+
+median(expA, na.rm = FALSE)
+median(expB, na.rm = FALSE)
+
+Z <- 1000
+
+expAmedian <- numeric(Z)
+expBmedian <- numeric(Z)
+
+for (i in 1:Z) {
+  expsampleA <- sample(x, size = length(x), replace = TRUE)
+  expsampleB <- sample(y, size = length(y), replace = TRUE)
+  expAmedian[i] <- median(expsampleA, na.rm = FALSE)
+  expBmedian[i] <- median(expsampleB, na.rm = FALSE)
+  }
+expAmedian
+expBmedian
+
+hist(expAmedian)
+hist(expBmedian)
+
+```
+
+## Summary 
+  * "The central limit theorem asserts that averages based on large samples have approximately normal
+    sampling distributions, regardless of the shape of the population distribution. This suggests
+    that underlying normality is not a serious issue, as long as sample sizes are reasonably large" 
+  
+  * This is to suggest that as we have different small sample sizes, if we run the bootstrap...to
+    extrapolate the values to a large sample size. The values will follow a normal standard
+    distribution based on the central limit theorem   
