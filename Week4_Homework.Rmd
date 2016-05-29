@@ -86,4 +86,6 @@ hist(expBmedian)
   
   * This is to suggest that as we have different small sample sizes, if we run the bootstrap...to
     extrapolate the values to a large sample size. The values will follow a normal standard
-    distribution based on the central limit theorem   
+    distribution based on the central limit theorem
+    
+  * Definition taken from "The Statistical Sleuth", 3rd Edition Ramsey/Schafer
