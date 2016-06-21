@@ -1,0 +1,140 @@
+---
+title: "Case Study"
+author: "Christopher Farrar"
+date: "June 21, 2016"
+output: 
+     html_document:
+     keep_md: true
+---
+
+## Case Study 
+
+  * Will be reviewing Gross Domestic Product Data
+    "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FGDP.csv" 
+  
+  * Education Data
+     "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FEDSTATS_Country.csv"
+
+# This Case Study will be answering the following Questions.
+
+  * Match the data based on the country shortcode. How many of the IDs match?
+  
+  * Sort the data frame in ascending order by GDP rank (so United States is last). What is the 13th 
+    country in the resulting data frame?
+    
+  * What are the average GDP rankings for the "High income: OECD" and "High income: nonOECD" groups?
+  
+  * Plot the GDP for all of the countries. Use ggplot2 to color your plot by Income Group
+  
+  * Cut the GDP ranking into 5 separate quantile groups. Make a table versus Income.Group. How many
+    countries are Lower middle income but among the 38 nations with highest GDP
+
+# Introduction
+ This will present data of how GDP and education data go something....etc
+ 
+```{r}
+
+# First need to download the files
+
+CaseStudy_1 <- read.csv("https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FGDP.csv")
+CaseStudy_2 <- read.csv("https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FEDSTATS_Country.csv")
+
+```
+
+# Next will be the tidying and merging data code
+
+```{r}
+
+# first need to look at how it is set up
+# This gets a look at the dimmesions of the data set
+dim(CaseStudy_1)
+
+# This gives us a quick summary of the data set
+summary(CaseStudy_1)
+
+# This looks at the data frame as well as create data frames
+data.frame(CaseStudy_1)
+
+# Also another function allows us to examine further the data frame
+str(CaseStudy_1)
+
+# After review of the GDP data, it apppears there were 6 columns with NA values that werent needed. So removed it
+CaseStudy_1$X.1 <- NULL
+CaseStudy_1$X.4 <- NULL
+CaseStudy_1$X.5 <- NULL
+CaseStudy_1$X.6 <- NULL
+CaseStudy_1$X.7 <- NULL
+CaseStudy_1$X.8 <- NULL
+
+# Also realizing that X isn't really a good name decided to change the header
+names(CaseStudy_1)[1] <- "CountryCode"
+names(CaseStudy_1)[2] <- "Country"
+names(CaseStudy_1)[3] <- "Economy"
+names(CaseStudy_1)[4] <- "Millions"
+
+# Also realizied there were some rows that didn't belong either
+
+CaseStudy_1 <- CaseStudy_1[-c(1:4),]
+CaseStudy_1 <- CaseStudy_1[-c(245:330),]
+
+# Realized didnt need another variable
+CaseStudy_1$Country <- NULL
+
+# Wanted to completed the correct sorting
+CaseStudy_1 <- CaseStudy_1[order(CaseStudy_1$CountryCode, CaseStudy_1$Economy, CaseStudy_1$Millions),]
+
+# Lastly wanted to remove some rows again
+CaseStudy_1 <- CaseStudy_1[-c(1:16),]
+
+# Final Product of CaseStudy_1
+CaseStudy_1
+
+# Have to load the melt package "reshape2"
+library(reshape2)
+
+# This removes the NA values from CaseStudy_2 Variable
+CaseStudy_2 <- melt(data = CaseStudy_2, na.rm = TRUE)
+
+# Now going to merge the data
+CaseStudy_3 <- merge(x = CaseStudy_1, y = CaseStudy_2, all = TRUE)
+
+# Now going to see the case studies merged
+names(CaseStudy_3)
+
+```
+
+# The code to answer the five questions
+
+```{r}
+
+# Question 1
+str(CaseStudy_1)
+
+# Based on the county code there are 239 values/countries
+
+# Question 2
+attach(CaseStudy_1)
+Question2 <- CaseStudy_1[order(Millions),]
+Question2
+detach(CaseStudy_1)
+
+# The answer is Bhutan
+
+# Question 3
+CaseStudy_2$Income.Group
+
+# The average for HighIncome NonOECD is 52 Million and the average for HighIncome OECD is 148 Million
+
+# Question 4
+library(ggplot2)
+ggplot(CaseStudy_3) + geom_bar(aes(Income.Group))
+
+# Question 5...Couldn't get quantile to work right based on int vs factor data
+CaseStudy_4 <- CaseStudy_3$value
+quantile(CaseStudy_4, probs = seq(0, 1, 0.25), na.rm = TRUE, names = TRUE)
+
+```
+
+# Conclusion
+ Enjoy the sweet sound of Case Study Music!
+
