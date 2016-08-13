@@ -1,0 +1,23 @@
+* Week 12 SAS Homework Chris Farrar; 
+* Utilizing SAS Library and rename;
+libname MSDSwork "\\client\c$\Users\Chris\Desktop\School\SMU\Spring 2016\DDS\Week12\SAS Assignment";
+run;
+data week12;
+set MSDSwork.dataset1;
+run;
+* Viewing what we have;
+proc print data = week12;
+run;
+proc contents data = week12;
+run;
+* Now the beginning of the merge;
+data week12;
+proc import out = exercise.xlsx 
+datafile = "\\client\c$\Users\Chris\Desktop\School\SMU\Spring 2016\DDS\Week12\SAS Assignment\CFarrar_Median_Income.xlsx"
+dbms = xlsx replace;
+getnames = yes;
+run;
+proc export data = exercise
+outfile = "\\client\c$\Users\Chris\Desktop\School\SMU\Spring 2016\DDS\Week12\SAS Assignment\Merges.xlsx"
+dbms = xlsx replace;
+run;
